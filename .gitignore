@@ -1,0 +1,19 @@
+# Артефакты сборки
+out/
+build/
+*.o
+*.obj
+*.exe
+*.dSYM/
+a.out
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Временные файлы редакторов
+*.swp
+*~
