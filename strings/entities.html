@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ЛР3 — HTML-сущности: один символ в трёх представлениях</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 46rem; margin: 2rem auto; padding: 0 1rem; }
+    code, pre { font-family: ui-monospace, monospace; }
+    table { border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #999; padding: .4rem .8rem; text-align: left; }
+    .symbol { font-size: 2rem; }
+  </style>
+</head>
+<body>
+  <h1>Один символ «ё» в трёх представлениях</h1>
+  <p>Все три абзаца ниже должны выглядеть одинаково:</p>
+
+  <p class="symbol">ё</p>
+  <p class="symbol">&#1105;</p>
+  <p class="symbol">&#x451;</p>
+
+  <table>
+    <thead>
+      <tr><th>Форма</th><th>Запись</th><th>Кодовая точка</th><th>UTF-8</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Обычный символ</td><td><code>ё</code></td><td>U+0451 (1105)</td><td><code>D1 91</code></td></tr>
+      <tr><td>Десятичная сущность</td><td><code>&amp;#1105;</code></td><td>U+0451 (1105)</td><td>—</td></tr>
+      <tr><td>Шестнадцатеричная сущность</td><td><code>&amp;#x451;</code></td><td>U+0451 (1105)</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Различия</h2>
+  <ul>
+    <li><strong>UTF-8</strong> — способ хранить кодовую точку в виде байтов файла: для «ё» это <code>D1 91</code>.</li>
+    <li><strong><code>&amp;#1105;</code></strong> — десятичная HTML-сущность: число 1105 в десятичной системе.</li>
+    <li><strong><code>&amp;#x451;</code></strong> — шестнадцатеричная HTML-сущность: 0x451 = 1105.</li>
+  </ul>
+  <p>Это три разных уровня: байты файла, числовая кодовая точка и синтаксис HTML-документа.
+     Браузер декодирует сущности в один и тот же U+0451.</p>
+</body>
+</html>
