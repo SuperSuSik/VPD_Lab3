@@ -33,9 +33,6 @@ all: strings regex web
 $(OUT):
 	$(MKDIR) $(OUT)
 
-$(REPORT):
-	$(MKDIR) $(REPORT)
-
 $(OUT)/ascii: $(STRINGS)/ascii.c | $(OUT)
 	$(CC) $(CFLAGS) $< -o $@
 
@@ -84,7 +81,8 @@ run: run-strings run-regex probes
 # ---------------------------------------------------------------------------
 
 # Детерминированный генератор: фиксированное зерно делает отчёт воспроизводимым.
-$(REGEX)/VPD_Lab3.txt: $(OUT)/generator | $(REPORT)
+$(REGEX)/VPD_Lab3.txt: $(OUT)/generator
+	@$(MKDIR) $(REPORT)
 	./$(OUT)/generator > $@
 	@control=$$(./$(OUT)/generator --print-control); \
 	count=$$(grep -o "$$control" $@ | wc -l | tr -d ' '); \
@@ -93,22 +91,28 @@ $(REGEX)/VPD_Lab3.txt: $(OUT)/generator | $(REPORT)
 	  "$$control" "$$count" "$$bytes" > $(REPORT)/generator_check.txt; \
 	test "$$count" = "3" || { echo "control sequence occurs $$count times, expected 3" >&2; exit 1; }
 
-$(REPORT)/ascii.txt: $(OUT)/ascii | $(REPORT)
+$(REPORT)/ascii.txt: $(OUT)/ascii
+	@$(MKDIR) $(REPORT)
 	./$(OUT)/ascii > $@
 
-$(REPORT)/utf8.txt: $(OUT)/utf8 | $(REPORT)
+$(REPORT)/utf8.txt: $(OUT)/utf8
+	@$(MKDIR) $(REPORT)
 	./$(OUT)/utf8 > $@
 
-$(REPORT)/types.txt: $(OUT)/types | $(REPORT)
+$(REPORT)/types.txt: $(OUT)/types
+	@$(MKDIR) $(REPORT)
 	./$(OUT)/types > $@
 
-$(REPORT)/encoding.txt: $(STRINGS)/encoding.py | $(REPORT)
+$(REPORT)/encoding.txt: $(STRINGS)/encoding.py
+	@$(MKDIR) $(REPORT)
 	$(PYTHON) $(STRINGS)/encoding.py > $@
 
-$(REPORT)/base64.txt: $(STRINGS)/base64_demo.py | $(REPORT)
+$(REPORT)/base64.txt: $(STRINGS)/base64_demo.py
+	@$(MKDIR) $(REPORT)
 	$(PYTHON) $(STRINGS)/base64_demo.py > $@
 
-$(REPORT)/unicode_identifiers.txt: probes | $(REPORT)
+$(REPORT)/unicode_identifiers.txt: probes
+	@$(MKDIR) $(REPORT)
 	{ \
 	  echo '=== C, GCC ==='; ./$(OUT)/unicode_identifiers_gcc; \
 	  echo '=== C, Clang ==='; ./$(OUT)/unicode_identifiers_clang; \
@@ -116,16 +120,20 @@ $(REPORT)/unicode_identifiers.txt: probes | $(REPORT)
 	  echo '=== JavaScript (Node.js) ==='; $(NODE) $(STRINGS)/unicode_identifiers.js; \
 	} > $@
 
-$(REPORT)/regex.txt: $(REGEX)/regex.py $(REGEX)/VPD_Lab3.txt | $(REPORT)
+$(REPORT)/regex.txt: $(REGEX)/regex.py $(REGEX)/VPD_Lab3.txt
+	@$(MKDIR) $(REPORT)
 	$(PYTHON) $(REGEX)/regex.py > $@
 
-$(REPORT)/web_validation.txt: $(WEB)/validation.test.js $(WEB)/validation.js | $(REPORT)
+$(REPORT)/web_validation.txt: $(WEB)/validation.test.js $(WEB)/validation.js
+	@$(MKDIR) $(REPORT)
 	$(NODE) $(WEB)/validation.test.js > $@
 
-$(REPORT)/uri.txt: $(WEB)/uri_demo.js $(WEB)/uri.js | $(REPORT)
+$(REPORT)/uri.txt: $(WEB)/uri_demo.js $(WEB)/uri.js
+	@$(MKDIR) $(REPORT)
 	$(NODE) $(WEB)/uri_demo.js > $@
 
-$(REPORT)/uri_python.txt: $(WEB)/uri_demo.py | $(REPORT)
+$(REPORT)/uri_python.txt: $(WEB)/uri_demo.py
+	@$(MKDIR) $(REPORT)
 	$(PYTHON) $(WEB)/uri_demo.py > $@
 
 report: $(REPORT)/ascii.txt $(REPORT)/utf8.txt $(REPORT)/types.txt \
@@ -134,7 +142,8 @@ report: $(REPORT)/ascii.txt $(REPORT)/utf8.txt $(REPORT)/types.txt \
         $(REPORT)/web_validation.txt $(REPORT)/uri.txt $(REPORT)/uri_python.txt \
         $(REPORT)/versions.txt
 
-$(REPORT)/versions.txt: | $(REPORT)
+$(REPORT)/versions.txt:
+	@$(MKDIR) $(REPORT)
 	{ \
 	  echo 'date:'; date; \
 	  echo 'os:'; sw_vers | sed 's/^/  /'; \
