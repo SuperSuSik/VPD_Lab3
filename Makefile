@@ -3,7 +3,9 @@
 # На macOS системный gcc — это Apple clang, поэтому по умолчанию используется
 # Homebrew GCC. На Linux достаточно `make CC=gcc`.
 
-CC       ?= gcc-16
+# := (а не ?=) важно: GNU Make уже определяет CC=cc; командная строка
+# по-прежнему может переопределить значение: make CC=gcc.
+CC       := gcc-16
 CLANG    ?= clang
 CFLAGS   ?= -std=c17 -Wall -Wextra -Wpedantic -O2
 PYTHON   ?= python3
