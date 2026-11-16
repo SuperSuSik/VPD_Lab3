@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ЛР3 — валидация строк, регулярные выражения и URI</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.45;
+      max-width: 62rem;
+      margin: 2rem auto;
+      padding: 0 1rem 4rem;
+    }
+    h1, h2 { line-height: 1.2; }
+    .lead { max-width: 52rem; }
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      gap: 1rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .field { display: flex; flex-direction: column; gap: .25rem; }
+    label { font-weight: 600; }
+    input {
+      font: inherit;
+      padding: .55rem .65rem;
+      border: 1px solid #888;
+      border-radius: .4rem;
+      background: Canvas;
+      color: CanvasText;
+    }
+    input.invalid { border: 2px solid #c62828; background: color-mix(in srgb, Canvas 92%, #c62828); }
+    .hint { font-size: .85rem; opacity: .8; }
+    .error-text { color: #c62828; min-height: 1.2em; font-size: .9rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1rem 0; }
+    button {
+      font: inherit;
+      padding: .55rem .9rem;
+      border-radius: .45rem;
+      border: 1px solid #666;
+      cursor: pointer;
+    }
+    button.primary { background: #2457a6; color: white; border-color: #2457a6; }
+    .result { min-height: 1.4em; font-weight: 600; }
+    .result.error { color: #c62828; }
+    .result.success { color: #1b7f3a; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; font-size: .92rem; }
+    th, td { border: 1px solid #999; padding: .45rem .55rem; text-align: left; vertical-align: top; }
+    th { background: color-mix(in srgb, Canvas 85%, #999); }
+    .row-ok td:last-child { color: #1b7f3a; font-weight: 600; }
+    .row-fail td:last-child { color: #c62828; font-weight: 600; }
+    pre {
+      overflow-x: auto;
+      padding: .8rem;
+      border: 1px solid #999;
+      border-radius: .4rem;
+      background: color-mix(in srgb, Canvas 92%, #999);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    section { margin-top: 2.2rem; }
+    .note { border-left: 4px solid #2457a6; padding-left: .9rem; opacity: .95; }
+  </style>
+</head>
+<body>
+  <h1>ЛР3. Валидация строк, регулярные выражения и URI</h1>
+  <p class="lead">
+    Учебная форма проверяет строковые данные без перезагрузки страницы.
+    Подсветка неверного поля и текст ошибки обновляются на месте.
+  </p>
+
+  <section>
+    <h2>1. Форма</h2>
+    <form id="validation-form" novalidate>
+      <div class="field">
+        <label for="fullName">ФИО</label>
+        <input id="fullName" name="fullName" type="text" autocomplete="name"
+               placeholder="Илья Сучков" aria-describedby="hint-fullName error-fullName">
+        <span class="hint" id="hint-fullName">2–4 слова на кириллице, допускается дефис.</span>
+        <span class="error-text" id="error-fullName" aria-live="polite"></span>
+      </div>
+
+      <div class="field">
+        <label for="group">Номер группы</label>
+        <input id="group" name="group" type="text" autocomplete="off"
+               placeholder="М3О-119БВ-26" aria-describedby="hint-group error-group">
+        <span class="hint" id="hint-group">Шаблон: М3О-<em>три цифры</em>БВ-<em>две цифры</em>; М и О кириллические.</span>
+        <span class="error-text" id="error-group" aria-live="polite"></span>
+      </div>
+
+      <div class="field">
+        <label for="phone">Телефон</label>
+        <input id="phone" name="phone" type="tel" autocomplete="tel"
+               placeholder="+7 (999) 123-45-67" aria-describedby="hint-phone error-phone">
+        <span class="hint" id="hint-phone">Один учебный формат: +7 (999) 123-45-67.</span>
+        <span class="error-text" id="error-phone" aria-live="polite"></span>
+      </div>
+
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email"
+               placeholder="student@example.org" aria-describedby="hint-email error-email">
+        <span class="hint" id="hint-email">Упрощённое правило, не полная реализация RFC 5322.</span>
+        <span class="error-text" id="error-email" aria-live="polite"></span>
+      </div>
+
+      <div class="field">
+        <label for="date">Дата</label>
+        <input id="date" name="date" type="text" autocomplete="off"
+               placeholder="2026-11-16" aria-describedby="hint-date error-date">
+        <span class="hint" id="hint-date">Формат YYYY-MM-DD + проверка существования даты.</span>
+        <span class="error-text" id="error-date" aria-live="polite"></span>
+      </div>
+
+      <div class="field">
+        <label for="uri">URI</label>
+        <input id="uri" name="uri" type="text" autocomplete="url"
+               placeholder="https://example.org:8443/api/v1/student-profile?id=304"
+               aria-describedby="hint-uri error-uri">
+        <span class="hint" id="hint-uri">Только http/https; проверка штатным <code>new URL()</code>.</span>
+        <span class="error-text" id="error-uri" aria-live="polite"></span>
+      </div>
+    </form>
+
+    <div class="actions">
+      <button class="primary" type="submit" form="validation-form">Проверить форму</button>
+      <button type="button" id="fill-valid">Заполнить валидный пример</button>
+      <button type="button" id="run-examples">Проверить набор примеров</button>
+    </div>
+
+    <p class="result" id="form-result" role="status" aria-live="polite"></p>
+
+    <h3>Примеры валидных и невалидных значений</h3>
+    <p id="examples-summary" class="hint"></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Поле</th>
+          <th>Значение</th>
+          <th>Ожидание</th>
+          <th>Факт</th>
+          <th>Проверка</th>
+          <th>Комментарий</th>
+        </tr>
+      </thead>
+      <tbody id="examples-output"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>2. Разбор URI: регулярное выражение и штатный URL</h2>
+    <p class="note">
+      Учебная регулярка разбирает схему, authority, путь, запрос и фрагмент.
+      Штатный <code>new URL()</code> дополнительно декодирует query-параметры.
+      Для реальных URI нужен специализированный парсер: он учитывает IPv6,
+      userinfo, IDN, percent-encoding и десятки краевых случаев.
+    </p>
+    <pre id="uri-regex">Загрузка…</pre>
+    <pre id="uri-url">Загрузка…</pre>
+  </section>
+
+  <section>
+    <h2>3. Percent-encoding, HTML-сущности и Base64</h2>
+    <p>Это три разных механизма и три разных контекста:</p>
+    <ul>
+      <li><strong>percent-encoding</strong> — кодирование байтов внутри URI;</li>
+      <li><strong>HTML-сущности</strong> — синтаксис HTML-документа для кодовой точки;</li>
+      <li><strong>Base64</strong> — представление произвольных байтов ASCII-текстом.</li>
+    </ul>
+    <pre id="percent-output">Загрузка…</pre>
+  </section>
+
+  <script src="validation.js"></script>
+  <script src="uri.js"></script>
+</body>
+</html>
