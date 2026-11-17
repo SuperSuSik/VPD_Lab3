@@ -18,9 +18,6 @@ STRINGS  := strings
 REGEX    := regex
 WEB      := web
 
-C_BINS   := $(OUT)/ascii $(OUT)/utf8 $(OUT)/types $(OUT)/generator \
-            $(OUT)/unicode_identifiers_gcc $(OUT)/unicode_identifiers_clang
-
 .PHONY: all strings regex web probes run run-strings run-regex report regenerate \
         versions clean distclean
 
@@ -67,8 +64,7 @@ run-strings: strings
 	$(PYTHON) $(STRINGS)/encoding.py
 	$(PYTHON) $(STRINGS)/base64_demo.py
 
-run-regex: regex
-	./$(OUT)/generator > $(REGEX)/VPD_Lab3.txt
+run-regex: $(REGEX)/VPD_Lab3.txt
 	$(PYTHON) $(REGEX)/regex.py
 
 run: run-strings run-regex probes
@@ -82,13 +78,15 @@ run: run-strings run-regex probes
 
 # Детерминированный генератор: фиксированное зерно делает отчёт воспроизводимым.
 $(REGEX)/VPD_Lab3.txt: $(OUT)/generator
-	@$(MKDIR) $(REPORT)
 	./$(OUT)/generator > $@
+
+$(REPORT)/generator_check.txt: $(REGEX)/VPD_Lab3.txt
+	@$(MKDIR) $(REPORT)
 	@control=$$(./$(OUT)/generator --print-control); \
-	count=$$(grep -o "$$control" $@ | wc -l | tr -d ' '); \
-	bytes=$$(wc -c < $@ | tr -d ' '); \
+	count=$$(grep -o "$$control" $(REGEX)/VPD_Lab3.txt | wc -l | tr -d ' '); \
+	bytes=$$(wc -c < $(REGEX)/VPD_Lab3.txt | tr -d ' '); \
 	printf 'control=%s\noccurrences=%s\nbytes=%s\nrandom_digits=100000\n' \
-	  "$$control" "$$count" "$$bytes" > $(REPORT)/generator_check.txt; \
+	  "$$control" "$$count" "$$bytes" > $@; \
 	test "$$count" = "3" || { echo "control sequence occurs $$count times, expected 3" >&2; exit 1; }
 
 $(REPORT)/ascii.txt: $(OUT)/ascii
@@ -120,6 +118,9 @@ $(REPORT)/unicode_identifiers.txt: probes
 	  echo '=== JavaScript (Node.js) ==='; $(NODE) $(STRINGS)/unicode_identifiers.js; \
 	} > $@
 
+$(REGEX)/VPD_Lab3_final.txt: $(REGEX)/regex.py $(REGEX)/VPD_Lab3.txt
+	$(PYTHON) $(REGEX)/regex.py > /dev/null
+
 $(REPORT)/regex.txt: $(REGEX)/regex.py $(REGEX)/VPD_Lab3.txt
 	@$(MKDIR) $(REPORT)
 	$(PYTHON) $(REGEX)/regex.py > $@
@@ -138,9 +139,9 @@ $(REPORT)/uri_python.txt: $(WEB)/uri_demo.py
 
 report: $(REPORT)/ascii.txt $(REPORT)/utf8.txt $(REPORT)/types.txt \
         $(REPORT)/encoding.txt $(REPORT)/base64.txt \
-        $(REPORT)/unicode_identifiers.txt $(REPORT)/regex.txt \
-        $(REPORT)/web_validation.txt $(REPORT)/uri.txt $(REPORT)/uri_python.txt \
-        $(REPORT)/versions.txt
+        $(REPORT)/unicode_identifiers.txt $(REPORT)/generator_check.txt \
+        $(REPORT)/regex.txt $(REPORT)/web_validation.txt $(REPORT)/uri.txt \
+        $(REPORT)/uri_python.txt $(REPORT)/versions.txt $(REGEX)/VPD_Lab3_final.txt
 
 $(REPORT)/versions.txt:
 	@$(MKDIR) $(REPORT)
@@ -157,8 +158,7 @@ $(REPORT)/versions.txt:
 	} > $@
 
 # Полная перегенерация данных задания и отчёта.
-regenerate: $(REGEX)/VPD_Lab3.txt report
-	$(PYTHON) $(REGEX)/regex.py > $(REPORT)/regex.txt
+regenerate: report
 
 clean:
 	rm -rf $(OUT)

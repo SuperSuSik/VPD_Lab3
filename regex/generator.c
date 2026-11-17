@@ -62,6 +62,10 @@ static int parse_unsigned_long(const char *text, unsigned long *result)
 {
     char *end = NULL;
 
+    if (text == NULL || text[0] == '\0' || text[0] == '-') {
+        return -1;
+    }
+
     errno = 0;
     unsigned long value = strtoul(text, &end, 10);
     if (errno != 0 || end == text || *end != '\0') {
@@ -76,6 +80,10 @@ static int parse_unsigned_long_long(const char *text,
                                     unsigned long long *result)
 {
     char *end = NULL;
+
+    if (text == NULL || text[0] == '\0' || text[0] == '-') {
+        return -1;
+    }
 
     errno = 0;
     unsigned long long value = strtoull(text, &end, 10);
