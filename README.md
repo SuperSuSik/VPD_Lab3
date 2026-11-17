@@ -6,6 +6,11 @@
 
 **Студент:** Илья Сучков, группа М3О-119БВ-26, номер в списке 21.
 
+**Репозиторий:** https://github.com/SuperSuSik/VPD_Lab3
+
+**Сайт (GitHub Pages):** https://supersusik.github.io/VPD_Lab3/ — интерактивная
+форма валидации из каталога `web/`, опубликованная через GitHub Actions.
+
 ## Окружение
 
 | Компонент | Версия / значение |
@@ -53,6 +58,9 @@ VPD_Lab3/
 │   ├── uri.js                  # URI: regex + new URL(), percent-encoding
 │   ├── uri_demo.js             # демонстрация URI в Node.js
 │   └── uri_demo.py             # URI через urllib.parse для сравнения
+├── .github/
+│   └── workflows/
+│       └── pages.yml           # публикация web/ на GitHub Pages
 ├── report/                     # сохранённые выводы программ
 ├── Makefile
 ├── NAMING.md                   # исправление стиля и семантики имён
@@ -119,6 +127,8 @@ python3 -m http.server 8000
 # затем открыть http://localhost:8000/web/index.html
 node web/validation.test.js
 ```
+
+Опубликованная версия формы: https://supersusik.github.io/VPD_Lab3/
 
 В форме есть кнопка «Заполнить валидный пример» и кнопка «Проверить набор
 примеров». Ошибки подсвечиваются на месте, без перезагрузки страницы.

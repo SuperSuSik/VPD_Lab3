@@ -4,7 +4,9 @@
 
 **Студент:** Илья Сучков, группа М3О-119БВ-26, номер в списке 21.
 
-**Репозиторий:** локальный git-репозиторий `VPD_Lab3` (рядом с `VPD_Lab2`).
+**Репозиторий:** https://github.com/SuperSuSik/VPD_Lab3
+
+**Сайт (GitHub Pages):** https://supersusik.github.io/VPD_Lab3/
 
 Цепочка работы:
 
