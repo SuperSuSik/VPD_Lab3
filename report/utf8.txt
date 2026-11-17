@@ -1,0 +1,77 @@
+=== UTF-8: одна и та же модель, разные длины ===
+
+Hello (ASCII)
+  text:        Hello
+  strlen:      5 (байты до '\0', не число глифов)
+  object size: 6 (sizeof массива, включая '\0')
+  bytes:       48 65 6C 6C 6F 
+  object:      48 65 6C 6C 6F 00 
+
+Привет (кириллица)
+  text:        Привет
+  strlen:      12 (байты до '\0', не число глифов)
+  object size: 13 (sizeof массива, включая '\0')
+  bytes:       D0 9F D1 80 D0 B8 D0 B2 D0 B5 D1 82 
+  object:      D0 9F D1 80 D0 B8 D0 B2 D0 B5 D1 82 00 
+
+ёж (2 буквы, 4 байта UTF-8)
+  text:        ёж
+  strlen:      4 (байты до '\0', не число глифов)
+  object size: 5 (sizeof массива, включая '\0')
+  bytes:       D1 91 D0 B6 
+  object:      D1 91 D0 B6 00 
+
+大学 (2 иероглифа, 6 байт UTF-8)
+  text:        大学
+  strlen:      6 (байты до '\0', не число глифов)
+  object size: 7 (sizeof массива, включая '\0')
+  bytes:       E5 A4 A7 E5 AD A6 
+  object:      E5 A4 A7 E5 AD A6 00 
+
+пять пробелов
+  text:             
+  strlen:      5 (байты до '\0', не число глифов)
+  object size: 6 (sizeof массива, включая '\0')
+  bytes:       20 20 20 20 20 
+  object:      20 20 20 20 20 00 
+
+Вывод: strlen() возвращает число байтов UTF-8, поэтому для
+«Привет» получается 12, а не 6. sizeof() массива на 1 больше:
+он включает завершающий нулевой байт.
+
+=== wchar_t и wide strings ===
+
+sizeof(wchar_t) = 4 байт на этой платформе
+
+L"Hello"
+  visible:         Hello
+  sizeof(wchar_t): 4 байт
+  sizeof(array):   24 байт
+  wcslen():        5 кодовых единиц (не глифов)
+  code units:      U+0048 U+0065 U+006C U+006C U+006F 
+
+L"Привет"
+  visible:         Привет
+  sizeof(wchar_t): 4 байт
+  sizeof(array):   28 байт
+  wcslen():        6 кодовых единиц (не глифов)
+  code units:      U+041F U+0440 U+0438 U+0432 U+0435 U+0442 
+
+L"ёж"
+  visible:         ёж
+  sizeof(wchar_t): 4 байт
+  sizeof(array):   12 байт
+  wcslen():        2 кодовых единиц (не глифов)
+  code units:      U+0451 U+0436 
+
+L"е\u0301" (e + комбинируемый знак)
+  visible:         е́
+  sizeof(wchar_t): 4 байт
+  sizeof(array):   12 байт
+  wcslen():        2 кодовых единиц (не глифов)
+  code units:      U+0435 U+0301 
+
+wchar_t на macOS имеет размер 4 байта, на Windows обычно 2.
+Это свойство реализации, а не гарантия «wchar_t = UTF-32».
+В последней строке две кодовые единицы (wcslen = 2), но один
+визуальный графемный кластер.

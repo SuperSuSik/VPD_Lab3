@@ -1,0 +1,10 @@
+=== C, GCC ===
+C (GCC): студент=304, 学生=7, __STDC_VERSION__=201710
+=== C, Clang ===
+C (Clang): студент=304, 学生=7, __STDC_VERSION__=201710
+=== Python ===
+Python: студент=304, 学生=7
+Оба идентификатора допустимы синтаксисом Python 3.
+=== JavaScript (Node.js) ===
+JavaScript (Node.js): студент=304, 学生=7
+Оба идентификатора допустимы синтаксисом ECMAScript.

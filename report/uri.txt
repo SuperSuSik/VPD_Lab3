@@ -1,0 +1,49 @@
+=== URI: учебная регулярка ===
+regex:
+  protocol : https:
+  hostname : example.org
+  port     : 8443
+  pathname : /api/v1/student-profile
+  search   : ?id=304&group=%D0%9C3%D0%9E-304%D0%91%D0%92-26
+  hash     : #results
+  note     : учебная регулярка; не является полным RFC 3986-парсером
+  query    : id = 304
+  query    : group = М3О-304БВ-26
+
+=== URI: штатный URL ===
+URL:
+  protocol : https:
+  hostname : example.org
+  port     : 8443
+  pathname : /api/v1/student-profile
+  search   : ?id=304&group=%D0%9C3%D0%9E-304%D0%91%D0%92-26
+  hash     : #results
+  note     : штатный парсер URL (WHATWG URL)
+  query    : id = 304
+  query    : group = М3О-304БВ-26
+
+Декодированная группа: М3О-304БВ-26
+Совпадение query-параметров: true
+
+percent-encoding (URI):
+  исходная группа : М3О-119БВ-26
+  encodeURIComponent: %D0%9C3%D0%9E-119%D0%91%D0%92-26
+  decodeURIComponent: М3О-119БВ-26
+  полный круг     : OK
+  UTF-8 байты     : D0 9C 33 D0 9E 2D 31 31 39 D0 91 D0 92 2D 32 36 (16 байт)
+  Base64 группы   : 0Jwz0J4tMTE50JHQki0yNg==
+
+HTML-сущности (HTML-документ):
+  символ          : ё
+  десятичная      : &#1105;
+  шестнадцатеричная: &#x451;
+  UTF-8 байты     : D1 91
+
+Base64 (бинарь → ASCII):
+  Base64 «ё»      : 0ZE=
+
+Это разные уровни: percent-encoding кодирует байты в URI,
+HTML-сущность задаёт кодовую точку в HTML, Base64 представляет
+любые байты ограниченным ASCII-алфавитом.
+
+Все утверждения assert пройдены.

@@ -1,0 +1,43 @@
+=== Одинаковые ASCII-коды в разных типах элементов ===
+
+char[]                : Hello
+short[]               : Hello
+int[]                 : Hello
+unsigned long long[]  : Hello
+
+sizeof(char[5])               =  5 байт
+sizeof(short[5])              = 10 байт
+sizeof(int[5])                = 20 байт
+sizeof(unsigned long long[5]) = 40 байт
+
+char hello_string[] = "Hello"; sizeof = 6 (5 букв + '\0')
+Только char-массив с '\0' является C-строкой. Массивы short/int/
+unsigned long long содержат те же числа, но не являются строкой:
+printf("%s", ...) ожидает char*, а не short* или int*.
+
+=== <stdint.h>: ширина типов ===
+
+CHAR_BIT           = 8 бит в одном байте
+sizeof(char)       = 1 байт
+sizeof(short)      = 2 байт
+sizeof(int)        = 4 байт
+sizeof(long)       = 8 байт
+sizeof(long long)  = 8 байт
+sizeof(unsigned int) = 4 байт
+
+uint8_t            = 1 байт, 8 бит (exact-width)
+uint16_t           = 2 байт, 16 бит (exact-width)
+uint32_t           = 4 байт, 32 бит (exact-width)
+uint64_t           = 8 байт, 64 бит (exact-width)
+
+uint_least32_t     = 4 байт, минимум 32 бита
+uint_fast32_t      = 4 байт, минимум 32 бита, выбран для скорости
+uint_least16_t     = 2 байт
+uint_fast16_t      = 2 байт
+uintmax_t          = 8 байт
+
+uint32_t существует только там, где есть ровно 32-битный
+беззнаковый тип без padding-битов. unsigned int обычно тоже
+4 байта, но стандарт не гарантирует ровно 32 бита. Для
+аппаратного регистра или поля протокола uint32_t информативнее:
+он фиксирует и ширину, и отсутствие знака.

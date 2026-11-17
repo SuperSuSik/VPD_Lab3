@@ -1,0 +1,23 @@
+=== Автоматические проверки формы ===
+поле       значение                                                                 ожидание  факт      результат
+-----------------------------------------------------------------------------------------------------------------------------
+fullName   Илья Сучков                                                              valid     valid     OK
+fullName   Ilya Suchkov                                                             invalid   invalid   OK
+group      М3О-119БВ-26                                                             valid     valid     OK
+group      М3О-304БВ-26                                                             valid     valid     OK
+group      M3O-119BV-26                                                             invalid   invalid   OK
+phone      +7 (999) 123-45-67                                                       valid     valid     OK
+phone      8 (999) 123-45-67                                                        invalid   invalid   OK
+email      student@example.org                                                      valid     valid     OK
+email      student@example                                                          invalid   invalid   OK
+date       2024-02-29                                                               valid     valid     OK
+date       2026-02-31                                                               invalid   invalid   OK
+date       16.11.2026                                                               invalid   invalid   OK
+uri        https://example.org:8443/api/v1/student-profile?id=304&group=%D0%9C...   valid     valid     OK
+uri        not a uri                                                                invalid   invalid   OK
+uri        ftp://example.org/file                                                   invalid   invalid   OK
+-----------------------------------------------------------------------------------------------------------------------------
+Пройдено проверок: 15/15
+Валидная форма: прошла
+Невалидная форма: ошибки в полях date, email, group, phone, uri
+Все утверждения assert пройдены.

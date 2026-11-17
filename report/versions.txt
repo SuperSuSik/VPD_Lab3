@@ -1,0 +1,22 @@
+date:
+Tue Nov 17 21:09:00 MSK 2026
+os:
+  ProductName:		macOS
+  ProductVersion:		26.3
+  BuildVersion:		25D2125
+arch:
+arm64
+gcc:
+gcc-16 (Homebrew GCC 16.2.0) 16.2.0
+clang:
+Apple clang version 21.0.0 (clang-2100.1.1.101)
+python:
+Python 3.15.0
+node:
+v26.12.1
+make:
+GNU Make 3.81
+locale:
+LANG="C.UTF-8"
+LC_COLLATE="C.UTF-8"
+LC_CTYPE="C.UTF-8"
