@@ -65,6 +65,8 @@ VPD_Lab3/
 ├── Makefile
 ├── NAMING.md                   # исправление стиля и семантики имён
 ├── REPORT.md                   # полный отчёт
+├── COMMANDS.md                 # все команды сборки, запуска и проверки
+├── DEFENSE.md                  # сценарий защиты и вопросы с ответами
 └── README.md
 ```
 
@@ -169,7 +171,8 @@ make clean && make report && make run
 
 Подробные таблицы, объяснения и сырые выводы — в [REPORT.md](REPORT.md) и
 каталоге [`report/`](report/). Правила нейминга и исправленные примеры —
-в [NAMING.md](NAMING.md).
+в [NAMING.md](NAMING.md). Все команды — в [COMMANDS.md](COMMANDS.md),
+подготовка к защите — в [DEFENSE.md](DEFENSE.md).
 
 ## Важные ограничения
 
