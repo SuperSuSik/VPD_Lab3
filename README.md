@@ -67,6 +67,7 @@ VPD_Lab3/
 ├── REPORT.md                   # полный отчёт
 ├── COMMANDS.md                 # все команды сборки, запуска и проверки
 ├── DEFENSE.md                  # сценарий защиты и вопросы с ответами
+├── DEMO.md                     # что показать на защите: шаги и команды
 └── README.md
 ```
 
@@ -172,7 +173,8 @@ make clean && make report && make run
 Подробные таблицы, объяснения и сырые выводы — в [REPORT.md](REPORT.md) и
 каталоге [`report/`](report/). Правила нейминга и исправленные примеры —
 в [NAMING.md](NAMING.md). Все команды — в [COMMANDS.md](COMMANDS.md),
-подготовка к защите — в [DEFENSE.md](DEFENSE.md).
+подготовка к защите — в [DEFENSE.md](DEFENSE.md), порядок показа на
+защите — в [DEMO.md](DEMO.md).
 
 ## Важные ограничения
 
