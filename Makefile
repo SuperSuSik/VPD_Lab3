@@ -157,6 +157,10 @@ $(REPORT)/versions.txt:
 	  echo 'locale:'; locale | head -3; \
 	} > $@
 
+# Принудительно обновить снимок окружения.
+versions:
+	@$(MAKE) -B --no-print-directory $(REPORT)/versions.txt
+
 # Полная перегенерация данных задания и отчёта.
 regenerate: report
 
